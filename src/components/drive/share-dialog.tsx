@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, UserPlus, Users, Lock, Globe } from 'lucide-react';
+import { X, UserPlus, Users, Globe } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import type { SolidResource, SolidPermission } from '@/lib/solid/types';
@@ -61,7 +61,7 @@ export function ShareDialog({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-lg font-semibold">Share "{resource.name}"</h2>
+          <h2 className="text-lg font-semibold">Share &quot;{resource.name}&quot;</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"

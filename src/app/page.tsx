@@ -76,7 +76,7 @@ export default function HomePage() {
             </Button>
             
             <div className="mt-6 text-sm text-gray-500">
-              <p>Don't have a Solid Pod?</p>
+              <p>Don&apos;t have a Solid Pod?</p>
               <a 
                 href="https://solidproject.org/users/get-a-pod" 
                 target="_blank" 

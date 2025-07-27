@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Upload, 
   FolderPlus, 
@@ -6,8 +6,7 @@ import {
   Grid, 
   List,
   Trash2,
-  Share,
-  Settings
+  Share
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -37,11 +36,7 @@ export function DriveInterface({ solidClient, initialPath = '/' }: DriveInterfac
   const [permissions, setPermissions] = useState<SolidPermission[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    loadResources();
-  }, [state.currentPath]);
-
-  const loadResources = async () => {
+  const loadResources = useCallback(async () => {
     setState(prev => ({ ...prev, isLoading: true, error: undefined }));
     
     try {
@@ -56,10 +51,14 @@ export function DriveInterface({ solidClient, initialPath = '/' }: DriveInterfac
       setState(prev => ({ 
         ...prev, 
         isLoading: false, 
-        error: error instanceof Error ? error.message : 'Failed to load resources' 
+        error: error instanceof Error ? error.message : 'Failed to load resources'
       }));
     }
-  };
+  }, [state.currentPath, solidClient]);
+
+  useEffect(() => {
+    loadResources();
+  }, [loadResources]);
 
   const handleNavigate = (path: string) => {
     setState(prev => ({ ...prev, currentPath: path }));

@@ -1,6 +1,6 @@
 import { 
   getSolidDataset, 
-  getThing, 
+  Thing,
   getUrl, 
   getStringNoLocale,
   getInteger,
@@ -10,12 +10,9 @@ import {
   deleteSolidDataset,
   createThing,
   addStringNoLocale,
-  addUrl,
   setThing,
   getThingAll,
-  getUrlAll,
-  addInteger,
-  addDatetime
+  getUrlAll
 } from '@inrupt/solid-client';
 import { 
   Session, 
@@ -108,7 +105,7 @@ export class SolidClient {
           type: isContainer ? 'folder' : 'file',
           size: size || undefined,
           lastModified: lastModified || undefined,
-          contentType: getStringNoLocale(thing, VCARD.type),
+          contentType: getStringNoLocale(thing, VCARD.type) || undefined,
           permissions: this.extractPermissions(thing),
         };
       });
@@ -174,10 +171,9 @@ export class SolidClient {
     
     // Create ACL dataset with permissions
     const aclDataset = createSolidDataset();
-    const aclThing = createThing({ url: aclUrl });
     
     // Add permission modes (Read, Write, Control, etc.)
-    modes.forEach(mode => {
+    modes.forEach(() => {
       // Implementation depends on the specific ACL vocabulary used
     });
     
@@ -201,7 +197,8 @@ export class SolidClient {
     }
   }
 
-  private extractPermissions(thing: any): SolidPermission[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private extractPermissions(_thing: Thing): SolidPermission[] {
     // Extract permissions from a resource thing
     // This is a simplified implementation
     return [];

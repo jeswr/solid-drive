@@ -37,7 +37,7 @@ export const test = base.extend<SolidServerFixture>({
         serverProcess.kill('SIGTERM');
       }
     });
-  }, { scope: 'worker' }],
+  }, { scope: 'test' }],
 });
 
 export { expect } from '@playwright/test';
