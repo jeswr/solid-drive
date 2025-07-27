@@ -58,6 +58,17 @@ export class SolidClient {
   }
 
   async initialize(): Promise<void> {
+    // Check for mock authentication in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const mockSession = (window as any).__mockSession;
+      if (mockSession) {
+        this.session.info.isLoggedIn = mockSession.isLoggedIn;
+        this.session.info.webId = mockSession.webId;
+        this.session.info.sessionId = mockSession.sessionId;
+      }
+      return;
+    }
+    
     await handleIncomingRedirect({
       url: window.location.href,
       restorePreviousSession: true,
@@ -65,6 +76,17 @@ export class SolidClient {
   }
 
   async login(): Promise<void> {
+    // Check for mock authentication in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const mockSession = (window as any).__mockSession;
+      if (mockSession) {
+        this.session.info.isLoggedIn = true;
+        this.session.info.webId = mockSession.webId;
+        this.session.info.sessionId = mockSession.sessionId;
+      }
+      return;
+    }
+    
     await login({
       oidcIssuer: this.config.serverUrl,
       clientId: this.config.clientId,
@@ -73,18 +95,53 @@ export class SolidClient {
   }
 
   async logout(): Promise<void> {
+    // Check for mock authentication in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      this.session.info.isLoggedIn = false;
+      this.session.info.webId = undefined;
+      this.session.info.sessionId = undefined;
+      return;
+    }
+    
     await logout();
   }
 
   isLoggedIn(): boolean {
+    // Check for mock authentication in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const mockSession = (window as any).__mockSession;
+      return mockSession?.isLoggedIn || false;
+    }
+    
     return this.session.info.isLoggedIn;
   }
 
   getWebId(): string | undefined {
+    // Check for mock authentication in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const mockSession = (window as any).__mockSession;
+      return mockSession?.webId;
+    }
+    
     return this.session.info.webId;
   }
 
   async listResources(path: string): Promise<SolidResource[]> {
+    // Check for mock mode in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const mockResources = (window as any).__mockResources || [];
+      const normalizedPath = path.endsWith('/') ? path : path + '/';
+      
+      return mockResources.filter((r: SolidResource) => {
+        // Get parent path of the resource
+        const resourceUrl = r.url;
+        const lastSlash = resourceUrl.lastIndexOf('/', resourceUrl.length - 2);
+        const parentPath = resourceUrl.substring(0, lastSlash + 1);
+        
+        return parentPath === normalizedPath;
+      });
+    }
+    
     try {
       const dataset = await getSolidDataset(path, { fetch: this.session.fetch });
       const things = getThingAll(dataset);
@@ -117,6 +174,24 @@ export class SolidClient {
 
   async createFolder(path: string, name: string): Promise<SolidResource> {
     const folderUrl = `${path}${path.endsWith('/') ? '' : '/'}${name}/`;
+    
+    // Check for mock mode in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const newFolder: SolidResource = {
+        url: folderUrl,
+        name,
+        type: 'folder',
+        permissions: [],
+      };
+      
+      if (!(window as any).__mockResources) {
+        (window as any).__mockResources = [];
+      }
+      (window as any).__mockResources.push(newFolder);
+      
+      return newFolder;
+    }
+    
     const dataset = createSolidDataset();
     const thing = createThing({ url: folderUrl });
     
@@ -135,6 +210,26 @@ export class SolidClient {
 
   async uploadFile(path: string, file: File): Promise<SolidResource> {
     const fileUrl = `${path}${path.endsWith('/') ? '' : '/'}${file.name}`;
+    
+    // Check for mock mode in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      const newFile: SolidResource = {
+        url: fileUrl,
+        name: file.name,
+        type: 'file',
+        size: file.size,
+        contentType: file.type,
+        lastModified: new Date(),
+        permissions: [],
+      };
+      
+      if (!(window as any).__mockResources) {
+        (window as any).__mockResources = [];
+      }
+      (window as any).__mockResources.push(newFile);
+      
+      return newFile;
+    }
     
     const response = await this.session.fetch(fileUrl, {
       method: 'PUT',
@@ -161,6 +256,16 @@ export class SolidClient {
   }
 
   async deleteResource(url: string): Promise<void> {
+    // Check for mock mode in tests
+    if (typeof window !== 'undefined' && (window as any).__mockSolidAuth) {
+      if ((window as any).__mockResources) {
+        (window as any).__mockResources = (window as any).__mockResources.filter(
+          (r: SolidResource) => r.url !== url
+        );
+      }
+      return;
+    }
+    
     await deleteSolidDataset(url, { fetch: this.session.fetch });
   }
 

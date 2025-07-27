@@ -1,0 +1,20 @@
+{
+  "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^7.0.0/components/context.jsonld",
+  "import": [
+    "css:config/app/main/default.json",
+    "css:config/http/server-factory/http.json",
+    "css:config/init/initialize-root.json",
+    "css:config/storage/backend/file.json",
+    "css:config/ldp/authentication/dpop-bearer.json",
+    "css:config/ldp/authorization/webacl.json",
+    "css:config/identity/ownership/token.json",
+    "css:config/identity/handler/default.json",
+    "css:config/identity/email/default.json"
+  ],
+  "@graph": [
+    {
+      "@id": "urn:solid-server:test:config",
+      "@type": "AppRunner"
+    }
+  ]
+}
