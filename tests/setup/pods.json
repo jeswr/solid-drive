@@ -1,0 +1,16 @@
+{
+  "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^7.0.0/components/context.jsonld",
+  "pods": [
+    {
+      "webId": "http://localhost:3001/testuser/profile/card#me",
+      "email": "testuser@example.com",
+      "password": "testpassword123",
+      "name": "Test User",
+      "podName": "testuser",
+      "createPod": true,
+      "register": true,
+      "createWebId": true,
+      "rootPod": false
+    }
+  ]
+}

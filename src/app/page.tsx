@@ -113,7 +113,10 @@ export default function HomePage() {
 
       {/* Drive Interface */}
       <div className="flex-1">
-        <DriveInterface solidClient={solidClient} />
+        <DriveInterface 
+          solidClient={solidClient} 
+          initialPath={webId ? webId.substring(0, webId.lastIndexOf('/profile')) + '/' : '/'} 
+        />
       </div>
     </div>
   );
