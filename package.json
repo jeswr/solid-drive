@@ -15,7 +15,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "next": "15.4.4",
+    "next": "15.5.19",
     "@inrupt/solid-client": "^1.24.0",
     "@inrupt/solid-client-authn-browser": "^1.12.0",
     "lucide-react": "^0.263.1",
@@ -30,9 +30,13 @@
     "@tailwindcss/postcss": "^4",
     "tailwindcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "15.4.4",
+    "eslint-config-next": "15.5.19",
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.40.0",
     "playwright": "^1.40.0"
+  },
+  "overrides": {
+    "undici": ">=6.27.0",
+    "serialize-javascript": ">=7.0.3"
   }
 }
