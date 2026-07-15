@@ -1,0 +1,10 @@
+{
+  "$schema": "https://solid.example/suite-tracking/suite.schema.json",
+  "id": "solid-drive",
+  "kind": "app",
+  "name": "Solid Drive",
+  "repo": "https://github.com/jeswr/solid-drive",
+  "category": "documents",
+  "maturity": "beta",
+  "visibility": "public"
+}
